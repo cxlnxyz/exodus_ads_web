@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="de" class="">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unauthorized - Exodus</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class'
+        }
+    </script>
+</head>
+<body class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white font-sans">
+<div class="min-h-screen flex items-center justify-center px-4 bg-gradient-to-r from-blue-500 to-purple-600">
+    <div class="absolute top-4 right-4">
+        <button id="darkModeToggle" class="text-white hover:bg-blue-700 p-2 rounded">
+            <i class="fas fa-moon" id="darkModeIcon"></i>
+        </button>
+    </div>
+    <div class="max-w-md w-full bg-white dark:bg-gray-800 rounded-2xl shadow-2xl overflow-hidden">
+        <div class="p-8 text-center">
+            <i class="fas fa-lock text-6xl text-red-500 dark:text-red-400 mb-6"></i>
+            <h2 class="text-3xl font-bold text-gray-800 dark:text-white mb-4">Zugriff verweigert</h2>
+            <p class="text-gray-600 dark:text-gray-300 mb-6">
+                Sie haben keine Berechtigung, auf diese Seite zuzugreifen.
+            </p>
+            <a href="/" class="inline-flex items-center px-8 py-3 bg-blue-600 dark:bg-blue-700 text-white font-semibold rounded-full hover:bg-blue-700 dark:hover:bg-blue-800 transition-all duration-300 transform hover:scale-105">
+                <i class="fas fa-home mr-3"></i>
+                Zurück zur Startseite
+            </a>
+        </div>
+        <div class="bg-gray-50 dark:bg-gray-700 p-6 text-center">
+            <div class="grid grid-cols-3 gap-4">
+                <div class="flex flex-col items-center">
+                    <i class="fas fa-shield-alt text-blue-500 dark:text-blue-400 text-3xl mb-2"></i>
+                    <span class="text-sm text-gray-600 dark:text-gray-300">Sicherheit</span>
+                </div>
+                <div class="flex flex-col items-center">
+                    <i class="fas fa-key text-green-500 dark:text-green-400 text-3xl mb-2"></i>
+                    <span class="text-sm text-gray-600 dark:text-gray-300">Authentifizierung</span>
+                </div>
+                <div class="flex flex-col items-center">
+                    <i class="fas fa-lock text-red-500 dark:text-red-400 text-3xl mb-2"></i>
+                    <span class="text-sm text-gray-600 dark:text-gray-300">Berechtigung</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Dark Mode Toggle
+    const htmlElement = document.documentElement;
+    const darkModeToggle = document.getElementById('darkModeToggle');
+    const darkModeIcon = document.getElementById('darkModeIcon');
+
+    // Check only for saved dark mode preference
+    if (localStorage.getItem('darkMode') === 'enabled') {
+        htmlElement.classList.add('dark');
+        darkModeIcon.classList.remove('fa-moon');
+        darkModeIcon.classList.add('fa-sun');
+    }
+
+    darkModeToggle.addEventListener('click', () => {
+        if (htmlElement.classList.contains('dark')) {
+            htmlElement.classList.remove('dark');
+            localStorage.setItem('darkMode', 'disabled');
+            darkModeIcon.classList.remove('fa-sun');
+            darkModeIcon.classList.add('fa-moon');
+        } else {
+            htmlElement.classList.add('dark');
+            localStorage.setItem('darkMode', 'enabled');
+            darkModeIcon.classList.remove('fa-moon');
+            darkModeIcon.classList.add('fa-sun');
+        }
+    });
+</script>
+</body>
+</html>

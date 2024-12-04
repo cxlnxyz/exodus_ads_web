@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="de" class="">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exodus - Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <script>
+        // Tailwind dark mode configuration
+        tailwind.config = {
+            darkMode: 'class'
+        }
+    </script>
+</head>
+<body class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white font-sans transition-colors duration-300">
+<div class="flex min-h-screen">
+    <!-- Sidebar -->
+    <div class="w-64 bg-blue-800 text-white p-6 dark:bg-blue-900">
+        <div class="mb-10 flex items-center justify-between">
+            <div class="flex items-center">
+                <i class="fas fa-sync-alt text-2xl mr-3"></i>
+                <h1 class="text-xl font-bold">Exodus</h1>
+            </div>
+            <button id="darkModeToggle" class="text-white hover:bg-blue-700 p-2 rounded">
+                <i class="fas fa-moon" id="darkModeIcon"></i>
+            </button>
+        </div>
+
+        <nav>
+            <ul>
+                <li class="mb-4">
+                    <a href="#" class="flex items-center text-white hover:bg-blue-700 dark:hover:bg-blue-800 p-2 rounded">
+                        <i class="fas fa-home mr-3"></i>Dashboard
+                    </a>
+                </li>
+                <li class="mb-4">
+                    <a href="#" class="flex items-center text-white hover:bg-blue-700 dark:hover:bg-blue-800 p-2 rounded">
+                        <i class="fas fa-users mr-3"></i>Benutzer
+                    </a>
+                </li>
+                <li class="mb-4">
+                    <a href="#" class="flex items-center text-white hover:bg-blue-700 dark:hover:bg-blue-800 p-2 rounded">
+                        <i class="fas fa-server mr-3"></i>Synchronisation
+                    </a>
+                </li>
+                <li class="mb-4">
+                    <a href="#" class="flex items-center text-white hover:bg-blue-700 dark:hover:bg-blue-800 p-2 rounded">
+                        <i class="fas fa-cogs mr-3"></i>Einstellungen
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+
+    <!-- Hauptinhalt -->
+    <div class="flex-1 bg-gray-100 dark:bg-gray-900">
+        <!-- Header -->
+        <header class="bg-white dark:bg-gray-800 shadow-md p-4 flex justify-between items-center">
+            <div class="flex items-center">
+                <h2 class="text-2xl font-semibold text-gray-800 dark:text-white">Dashboard</h2>
+            </div>
+            <div class="flex items-center">
+                <span class="text-gray-700 dark:text-gray-300" id="username">Max Mustermann</span>
+                <a href="/logout" class="ml-4 text-blue-600 dark:text-blue-400 hover:underline">Logout</a>
+            </div>
+        </header>
+
+        <!-- Dashboard Inhalt -->
+        <main class="p-6">
+            <div class="grid grid-cols-3 gap-6 mb-6">
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow dark:shadow-xl">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-lg font-semibold text-gray-800 dark:text-white">Synchronisationen</h3>
+                        <i class="fas fa-sync text-blue-600 dark:text-blue-400"></i>
+                    </div>
+                    <div class="text-3xl font-bold text-blue-600 dark:text-blue-400">42</div>
+                    <div class="text-sm text-gray-500 dark:text-gray-400">Letzte 30 Tage</div>
+                </div>
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow dark:shadow-xl">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-lg font-semibold text-gray-800 dark:text-white">Benutzer</h3>
+                        <i class="fas fa-users text-green-600 dark:text-green-400"></i>
+                    </div>
+                    <div class="text-3xl font-bold text-green-600 dark:text-green-400">1,253</div>
+                    <div class="text-sm text-gray-500 dark:text-gray-400">Aktive Benutzer</div>
+                </div>
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow dark:shadow-xl">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-lg font-semibold text-gray-800 dark:text-white">Systeme</h3>
+                        <i class="fas fa-server text-purple-600 dark:text-purple-400"></i>
+                    </div>
+                    <div class="text-3xl font-bold text-purple-600 dark:text-purple-400">7</div>
+                    <div class="text-sm text-gray-500 dark:text-gray-400">Verbundene Systeme</div>
+                </div>
+            </div>
+
+            <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow dark:shadow-xl">
+                <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">Letzte Synchronisationen</h3>
+                <table class="w-full">
+                    <thead>
+                    <tr class="bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300">
+                        <th class="text-left p-3">Zeitpunkt</th>
+                        <th class="text-left p-3">System</th>
+                        <th class="text-left p-3">Status</th>
+                        <th class="text-left p-3">Benutzer</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr class="border-b dark:border-gray-700">
+                        <td class="p-3">2024-01-15 10:30</td>
+                        <td class="p-3">AD-Server Frankfurt</td>
+                        <td class="p-3">
+                            <span class="bg-green-100 dark:bg-green-900 text-green-600 dark:text-green-300 px-2 py-1 rounded-full text-xs">Erfolgreich</span>
+                        </td>
+                        <td class="p-3">J. Schmidt</td>
+                    </tr>
+                    <tr class="border-b dark:border-gray-700">
+                        <td class="p-3">2024-01-14 16:45</td>
+                        <td class="p-3">AD-Server Berlin</td>
+                        <td class="p-3">
+                            <span class="bg-yellow-100 dark:bg-yellow-900 text-yellow-600 dark:text-yellow-300 px-2 py-1 rounded-full text-xs">In Bearbeitung</span>
+                        </td>
+                        <td class="p-3">M. Weber</td>
+                    </tr>
+                    <tr>
+                        <td class="p-3">2024-01-13 09:15</td>
+                        <td class="p-3">AD-Server München</td>
+                        <td class="p-3">
+                            <span class="bg-green-100 dark:bg-green-900 text-green-600 dark:text-green-300 px-2 py-1 rounded-full text-xs">Erfolgreich</span>
+                        </td>
+                        <td class="p-3">A. Bauer</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+</div>
+<script>
+    document.getElementById('username').textContent = "{{username}}";
+
+    // Dark Mode Toggle
+    const htmlElement = document.documentElement;
+    const darkModeToggle = document.getElementById('darkModeToggle');
+    const darkModeIcon = document.getElementById('darkModeIcon');
+
+    // Check for saved dark mode preference or system preference
+    if (localStorage.getItem('darkMode') === 'enabled' ||
+        (!('darkMode' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        htmlElement.classList.add('dark');
+        darkModeIcon.classList.remove('fa-moon');
+        darkModeIcon.classList.add('fa-sun');
+    }
+
+    darkModeToggle.addEventListener('click', () => {
+        if (htmlElement.classList.contains('dark')) {
+            htmlElement.classList.remove('dark');
+            localStorage.setItem('darkMode', 'disabled');
+            darkModeIcon.classList.remove('fa-sun');
+            darkModeIcon.classList.add('fa-moon');
+        } else {
+            htmlElement.classList.add('dark');
+            localStorage.setItem('darkMode', 'enabled');
+            darkModeIcon.classList.remove('fa-moon');
+            darkModeIcon.classList.add('fa-sun');
+        }
+    });
+</script>
+</body>
+</html>
