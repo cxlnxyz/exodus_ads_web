@@ -25,6 +25,7 @@
         </div>
         <h1 class="text-2xl font-bold mb-6 text-center text-blue-600 dark:text-blue-400">Exodus Login</h1>
         <form action="/login" method="post">
+            <div id="error-message" class="mb-4 text-red-500"></div>
             <div class="mb-4">
                 <label for="username" class="block text-gray-700 dark:text-gray-300 mb-2">Benutzername:</label>
                 <input
@@ -56,6 +57,38 @@
 </div>
 
 <script>
+    document.querySelector('form').addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const form = event.target;
+        const formData = new URLSearchParams(new FormData(form)).toString();
+        const response = await fetch(form.action, {
+            method: form.method,
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: formData,
+        });
+
+        if (response.headers.get('Content-Type')?.includes('application/json')) {
+            const result = await response.json();
+            if (result.success) {
+                window.location.href = '/dashboard';
+            } else {
+                const errorMessage = document.getElementById('error-message');
+                errorMessage.textContent = result.message;
+                setTimeout(() => {
+                    errorMessage.textContent = '';
+                }, 3000); // Clear the error message after 3 seconds
+            }
+        } else {
+            const errorMessage = document.getElementById('error-message');
+            errorMessage.textContent = 'An unexpected error occurred.';
+            setTimeout(() => {
+                errorMessage.textContent = '';
+            }, 3000); // Clear the error message after 3 seconds
+        }
+    });
+
     const themeToggle = document.getElementById('theme-toggle');
     const themeIcon = document.getElementById('theme-icon');
 

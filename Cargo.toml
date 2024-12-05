@@ -9,3 +9,4 @@ actix-session = "0.5"
 actix-service = "2.0.2"
 futures = "0.3.31"
 serde = { version = "1.0.215", features = ["derive"] }
+ldap3 = "0.9"

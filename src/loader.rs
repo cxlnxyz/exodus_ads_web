@@ -1,6 +1,7 @@
 mod server {
     pub mod ldap;
     pub mod users;
+    pub mod sync;
 }
 
 mod web {
@@ -11,12 +12,10 @@ mod web {
 }
 
 pub fn load_and_start() {
-    println!("Loading LDAP module...");
-    server::ldap::some_function();
-
     println!("Loading Users module...");
-    server::users::some_function();
+    server::users::load();
 
     println!("Loading Webserver module...");
     web::webserver::load();
+
 }

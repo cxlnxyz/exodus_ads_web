@@ -1,3 +1,3 @@
-pub fn some_function() {
+pub fn load() {
     println!("LDAP function called");
 }
