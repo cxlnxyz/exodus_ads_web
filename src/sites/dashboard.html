@@ -30,22 +30,22 @@
         <nav>
             <ul>
                 <li class="mb-4">
-                    <a href="#" class="flex items-center text-white hover:bg-blue-700 dark:hover:bg-blue-800 p-2 rounded">
+                    <a href="#" class="flex items-center text-white hover:bg-blue-700 dark:hover:bg-blue-800 p-2 rounded" data-section="dashboard">
                         <i class="fas fa-home mr-3"></i>Dashboard
                     </a>
                 </li>
                 <li class="mb-4">
-                    <a href="#" class="flex items-center text-white hover:bg-blue-700 dark:hover:bg-blue-800 p-2 rounded">
+                    <a href="#" class="flex items-center text-white hover:bg-blue-700 dark:hover:bg-blue-800 p-2 rounded" data-section="users">
                         <i class="fas fa-users mr-3"></i>Benutzer
                     </a>
                 </li>
                 <li class="mb-4">
-                    <a href="#" class="flex items-center text-white hover:bg-blue-700 dark:hover:bg-blue-800 p-2 rounded">
+                    <a href="#" class="flex items-center text-white hover:bg-blue-700 dark:hover:bg-blue-800 p-2 rounded" data-section="sync">
                         <i class="fas fa-server mr-3"></i>Synchronisation
                     </a>
                 </li>
                 <li class="mb-4">
-                    <a href="#" class="flex items-center text-white hover:bg-blue-700 dark:hover:bg-blue-800 p-2 rounded">
+                    <a href="#" class="flex items-center text-white hover:bg-blue-700 dark:hover:bg-blue-800 p-2 rounded" data-section="settings">
                         <i class="fas fa-cogs mr-3"></i>Einstellungen
                     </a>
                 </li>
@@ -54,91 +54,98 @@
     </div>
 
     <!-- Hauptinhalt -->
-    <div class="flex-1 bg-gray-100 dark:bg-gray-900">
-        <!-- Header -->
-        <header class="bg-white dark:bg-gray-800 shadow-md p-4 flex justify-between items-center">
-            <div class="flex items-center">
-                <h2 class="text-2xl font-semibold text-gray-800 dark:text-white">Dashboard</h2>
-            </div>
-            <div class="flex items-center">
-                <span class="text-gray-700 dark:text-gray-300" id="username">Max Mustermann</span>
-                <a href="/logout" class="ml-4 text-blue-600 dark:text-blue-400 hover:underline">Logout</a>
-            </div>
-        </header>
-
-        <!-- Dashboard Inhalt -->
-        <main class="p-6">
-            <div class="grid grid-cols-3 gap-6 mb-6">
-                <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow dark:shadow-xl">
-                    <div class="flex justify-between items-center mb-4">
-                        <h3 class="text-lg font-semibold text-gray-800 dark:text-white">Synchronisationen</h3>
-                        <i class="fas fa-sync text-blue-600 dark:text-blue-400"></i>
-                    </div>
-                    <div class="text-3xl font-bold text-blue-600 dark:text-blue-400">0</div>
-                    <div class="text-sm text-gray-500 dark:text-gray-400">Letzte 30 Tage</div>
-                </div>
-                <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow dark:shadow-xl">
-                    <div class="flex justify-between items-center mb-4">
-                        <h3 class="text-lg font-semibold text-gray-800 dark:text-white">Benutzer</h3>
-                        <i class="fas fa-users text-green-600 dark:text-green-400"></i>
-                    </div>
-                    <div class="text-3xl font-bold text-green-600 dark:text-green-400">1</div>
-                    <div class="text-sm text-gray-500 dark:text-gray-400">Aktive Benutzer</div>
-                </div>
-                <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow dark:shadow-xl">
-                    <div class="flex justify-between items-center mb-4">
-                        <h3 class="text-lg font-semibold text-gray-800 dark:text-white">Systeme</h3>
-                        <i class="fas fa-server text-purple-600 dark:text-purple-400"></i>
-                    </div>
-                    <div class="text-3xl font-bold text-purple-600 dark:text-purple-400">1</div>
-                    <div class="text-sm text-gray-500 dark:text-gray-400">Verbundene Systeme</div>
-                </div>
-            </div>
-
-            <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow dark:shadow-xl">
-                <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">Letzte Synchronisationen</h3>
-                <table class="w-full">
-                    <thead>
-                    <tr class="bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300">
-                        <th class="text-left p-3">Zeitpunkt</th>
-                        <th class="text-left p-3">System</th>
-                        <th class="text-left p-3">Status</th>
-                        <th class="text-left p-3">Benutzer</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr class="border-b dark:border-gray-700">
-                        <td class="p-3">2024-12-2 14:00</td>
-                        <td class="p-3">AD-Server Home</td>
-                        <td class="p-3">
-                            <span class="bg-green-100 dark:bg-green-900 text-green-600 dark:text-green-300 px-2 py-1 rounded-full text-xs">Erfolgreich</span>
-                        </td>
-                        <td class="p-3">admin</td>
-                    </tr>
-                    <tr class="border-b dark:border-gray-700">
-                        <td class="p-3">2024-12-2 13:00</td>
-                        <td class="p-3">AD-Server Home</td>
-                        <td class="p-3">
-                            <span class="bg-yellow-100 dark:bg-yellow-900 text-yellow-600 dark:text-yellow-300 px-2 py-1 rounded-full text-xs">In Bearbeitung</span>
-                        </td>
-                        <td class="p-3">admin</td>
-                    </tr>
-                    <tr>
-                        <td class="p-3">2024-12-2 12:00</td>
-                        <td class="p-3">AD-Server Home</td>
-                        <td class="p-3">
-                            <span class="bg-green-100 dark:bg-green-900 text-green-600 dark:text-green-300 px-2 py-1 rounded-full text-xs">Erfolgreich</span>
-                        </td>
-                        <td class="p-3">admin</td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-        </main>
+    <div class="flex-1 bg-gray-100 dark:bg-gray-900" id="main-content">
+        <!-- Content will be loaded here -->
     </div>
 </div>
 <script>
-    document.getElementById('username').textContent = "{{username}}";
+    document.querySelectorAll('nav a').forEach(link => {
+        link.addEventListener('click', function(event) {
+            event.preventDefault();
+            const section = this.getAttribute('data-section');
+            loadSection(section);
+        });
+    });
+
+    function loadSection(section) {
+        const content = {
+            dashboard: `<main class="p-6">
+                <div class="grid grid-cols-3 gap-6 mb-6">
+                    <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow dark:shadow-xl">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-lg font-semibold text-gray-800 dark:text-white">Synchronisationen</h3>
+                            <i class="fas fa-sync text-blue-600 dark:text-blue-400"></i>
+                        </div>
+                        <div class="text-3xl font-bold text-blue-600 dark:text-blue-400">0</div>
+                        <div class="text-sm text-gray-500 dark:text-gray-400">Letzte 30 Tage</div>
+                    </div>
+                    <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow dark:shadow-xl">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-lg font-semibold text-gray-800 dark:text-white">Benutzer</h3>
+                            <i class="fas fa-users text-green-600 dark:text-green-400"></i>
+                        </div>
+                        <div class="text-3xl font-bold text-green-600 dark:text-green-400">1</div>
+                        <div class="text-sm text-gray-500 dark:text-gray-400">Aktive Benutzer</div>
+                    </div>
+                    <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow dark:shadow-xl">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-lg font-semibold text-gray-800 dark:text-white">Systeme</h3>
+                            <i class="fas fa-server text-purple-600 dark:text-purple-400"></i>
+                        </div>
+                        <div class="text-3xl font-bold text-purple-600 dark:text-purple-400">1</div>
+                        <div class="text-sm text-gray-500 dark:text-gray-400">Verbundene Systeme</div>
+                    </div>
+                </div>
+
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow dark:shadow-xl">
+                    <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">Letzte Synchronisationen</h3>
+                    <table class="w-full">
+                        <thead>
+                        <tr class="bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300">
+                            <th class="text-left p-3">Zeitpunkt</th>
+                            <th class="text-left p-3">System</th>
+                            <th class="text-left p-3">Status</th>
+                            <th class="text-left p-3">Benutzer</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr class="border-b dark:border-gray-700">
+                            <td class="p-3">2024-12-2 14:00</td>
+                            <td class="p-3">AD-Server Home</td>
+                            <td class="p-3">
+                                <span class="bg-green-100 dark:bg-green-900 text-green-600 dark:text-green-300 px-2 py-1 rounded-full text-xs">Erfolgreich</span>
+                            </td>
+                            <td class="p-3">admin</td>
+                        </tr>
+                        <tr class="border-b dark:border-gray-700">
+                            <td class="p-3">2024-12-2 13:00</td>
+                            <td class="p-3">AD-Server Home</td>
+                            <td class="p-3">
+                                <span class="bg-yellow-100 dark:bg-yellow-900 text-yellow-600 dark:text-yellow-300 px-2 py-1 rounded-full text-xs">In Bearbeitung</span>
+                            </td>
+                            <td class="p-3">admin</td>
+                        </tr>
+                        <tr>
+                            <td class="p-3">2024-12-2 12:00</td>
+                            <td class="p-3">AD-Server Home</td>
+                            <td class="p-3">
+                                <span class="bg-green-100 dark:bg-green-900 text-green-600 dark:text-green-300 px-2 py-1 rounded-full text-xs">Erfolgreich</span>
+                            </td>
+                            <td class="p-3">admin</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </main>`,
+            users: '<h2 class="text-2xl font-semibold text-gray-800 dark:text-white">Benutzer Content</h2>',
+            sync: '<h2 class="text-2xl font-semibold text-gray-800 dark:text-white">Synchronisation Content</h2>',
+            settings: '<h2 class="text-2xl font-semibold text-gray-800 dark:text-white">Einstellungen Content</h2>',
+        };
+        document.getElementById('main-content').innerHTML = content[section];
+    }
+
+    // Load default section
+    loadSection('dashboard');
 
     // Dark Mode Toggle
     const htmlElement = document.documentElement;

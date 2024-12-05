@@ -1,6 +1,7 @@
 use std::process::{Command, Output};
 use std::io::{self, Write};
 use std::os::windows::process::ExitStatusExt;
+use local_ip_address::local_ip;
 
 pub fn load() {
     println!("Loading Sync module...");
@@ -36,10 +37,10 @@ pub(crate) fn run_syncall(dc1_ip: &str, dc2_ip: &str) -> Result<Output, String> 
 }
 
 fn main() {
-    let dc1_ip = "192.168.1.1"; // Replace with your DC1 IP address
-    let dc2_ip = "192.168.1.2"; // Replace with your DC2 IP address
+    let dc1_ip = "192.168.1.1";
+    let dc2_ip = local_ip().unwrap().to_string();
 
-    match run_syncall(dc1_ip, dc2_ip) {
+    match run_syncall(dc1_ip, dc2_ip.as_str()) {
         Ok(output) => {
             println!("AD synchronization successfully completed!");
             io::stdout().write_all(&output.stdout).unwrap();
