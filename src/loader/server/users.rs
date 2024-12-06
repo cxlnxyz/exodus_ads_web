@@ -1,28 +1,34 @@
-use ldap3::{LdapConn, LdapError, Scope};
+use ldap3::{LdapConnAsync, Scope, SearchEntry};
+use std::error::Error;
 
-pub fn load() {
-    println!("users function called");
-}
-
-pub fn authenticate(username: &str, password: &str) -> Result<bool, LdapError> {
-    let ldap_url = "ldap://your-ad-server";
-    let bind_dn = format!("{}@your-domain", username);
-    let search_base = "dc=your-domain,dc=com";
+pub async fn authenticate(username: &str, password: &str) -> Result<bool, Box<dyn Error>> {
+    let ldap_url = "ldap://colin-CN-DC2-CA.home";
+    let bind_dn = format!("CN={},DC=colin,DC=home", username);
+    let search_base = "DC=colin,DC=home";
     let search_filter = format!("(sAMAccountName={})", username);
 
-    let mut ldap = LdapConn::new(ldap_url)?;
-    ldap.simple_bind(&bind_dn, password)?.success()?;
+    let (conn, mut ldap) = LdapConnAsync::new(ldap_url).await?;
+    ldap3::drive!(conn);
 
-    let (rs, _res) = ldap.search(
-        search_base,
-        Scope::Subtree,
-        &search_filter,
-        vec!["dn"],
-    )?.success()?;
-
-    if rs.len() == 1 {
-        Ok(true)
-    } else {
-        Ok(false)
+    let bind_result = ldap.simple_bind(&bind_dn, password).await?.success();
+    if bind_result.is_err() {
+        return Ok(false);
     }
+
+    let search_result = ldap
+        .search(
+            search_base,
+            Scope::Subtree,
+            &search_filter,
+            vec!["dn"],
+        )
+        .await?
+        .success()?;
+
+    let entries: Vec<SearchEntry> = search_result
+        .into_iter()
+        .map(SearchEntry::construct)
+        .collect();
+
+    Ok(!entries.is_empty())
 }

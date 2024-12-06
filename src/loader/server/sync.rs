@@ -37,10 +37,10 @@ pub(crate) fn run_syncall(dc1_ip: &str, dc2_ip: &str) -> Result<Output, String> 
 }
 
 fn main() {
-    let dc1_ip = "192.168.1.1";
-    let dc2_ip = local_ip().unwrap().to_string();
+    let dc1_fqdn = "CN-DC1.COLIN.HOME"; // Replace with your DC1 FQDN
+    let dc2_fqdn = "CN-DC2.COLIN.HOME"; // Replace with your DC2 FQDN
 
-    match run_syncall(dc1_ip, dc2_ip.as_str()) {
+    match run_syncall(dc1_fqdn, dc2_fqdn) {
         Ok(output) => {
             println!("AD synchronization successfully completed!");
             io::stdout().write_all(&output.stdout).unwrap();
