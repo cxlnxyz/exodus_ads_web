@@ -12,10 +12,6 @@ mod web {
 }
 
 pub fn load_and_start() {
-    println!("Loading Users module...");
-    server::users::load();
-
     println!("Loading Webserver module...");
     web::webserver::load();
-
 }

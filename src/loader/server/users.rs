@@ -1,34 +1,34 @@
-use ldap3::{LdapConnAsync, Scope, SearchEntry};
+use ldap3::{LdapConn, Scope, SearchEntry};
 use std::error::Error;
 
-pub async fn authenticate(username: &str, password: &str) -> Result<bool, Box<dyn Error>> {
-    let ldap_url = "ldap://colin-CN-DC2-CA.home";
-    let bind_dn = format!("CN={},DC=colin,DC=home", username);
-    let search_base = "DC=colin,DC=home";
-    let search_filter = format!("(sAMAccountName={})", username);
+pub fn authenticate(username: &str, password: &str) -> Result<bool, Box<dyn Error>> {
+    let mut ldap = LdapConn::new("ldap://colin.home:389")?;
 
-    let (conn, mut ldap) = LdapConnAsync::new(ldap_url).await?;
-    ldap3::drive!(conn);
+    // Try different formats for the username
+    let bind_formats = vec![
+        format!("CN={},CN=Users,DC=colin,DC=home", username),
+        format!("{}@colin.home", username),
+        username.to_string(),
+    ];
 
-    let bind_result = ldap.simple_bind(&bind_dn, password).await?.success();
-    if bind_result.is_err() {
-        return Ok(false);
+    for bind_dn in bind_formats {
+        println!("Trying to bind with: {}", bind_dn);
+        match ldap.simple_bind(&bind_dn, password) {
+            Ok(_) => {
+                println!("Successfully bound with: {}", bind_dn);
+                // If the bind was successful, perform a search
+                let result = ldap.search(
+                    "DC=colin,DC=home",
+                    Scope::Subtree,
+                    &format!("(sAMAccountName={})", username),
+                    vec!["cn"]
+                )?;
+
+                return Ok(!result.0.is_empty());
+            },
+            Err(e) => println!("Failed to bind with {}: {:?}", bind_dn, e),
+        }
     }
 
-    let search_result = ldap
-        .search(
-            search_base,
-            Scope::Subtree,
-            &search_filter,
-            vec!["dn"],
-        )
-        .await?
-        .success()?;
-
-    let entries: Vec<SearchEntry> = search_result
-        .into_iter()
-        .map(SearchEntry::construct)
-        .collect();
-
-    Ok(!entries.is_empty())
+    Ok(false)
 }
