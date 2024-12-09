@@ -1,34 +1,43 @@
-use ldap3::{LdapConn, Scope, SearchEntry};
-use std::error::Error;
+use actix_web::{web, HttpResponse, Error};
+use serde::{Deserialize, Serialize};
+use reqwest::Client;
 
-pub fn authenticate(username: &str, password: &str) -> Result<bool, Box<dyn Error>> {
-    let mut ldap = LdapConn::new("ldap://colin.home:389")?;
+#[derive(Serialize, Deserialize)]
+pub struct LoginRequest {
+    username: String,
+    password: String,
+}
 
-    // Try different formats for the username
-    let bind_formats = vec![
-        format!("CN={},CN=Users,DC=colin,DC=home", username),
-        format!("{}@colin.home", username),
-        username.to_string(),
-    ];
+#[derive(Serialize, Deserialize)]
+struct AuthResponse {
+    success: bool,
+}
 
-    for bind_dn in bind_formats {
-        println!("Trying to bind with: {}", bind_dn);
-        match ldap.simple_bind(&bind_dn, password) {
-            Ok(_) => {
-                println!("Successfully bound with: {}", bind_dn);
-                // If the bind was successful, perform a search
-                let result = ldap.search(
-                    "DC=colin,DC=home",
-                    Scope::Subtree,
-                    &format!("(sAMAccountName={})", username),
-                    vec!["cn"]
-                )?;
+pub(crate) async fn ldap_login(login: web::Json<LoginRequest>) -> Result<HttpResponse, Error> {
+    let api_url = "http://127.0.0.1:8080/login";
+    let client = Client::new();
 
-                return Ok(!result.0.is_empty());
-            },
-            Err(e) => println!("Failed to bind with {}: {:?}", bind_dn, e),
+    let response = client.post(api_url)
+        .json(&*login)
+        .send()
+        .await
+        .map_err(|e| {
+            eprintln!("Failed to send request to API: {:?}", e);
+            actix_web::error::ErrorInternalServerError("Failed to send request to API")
+        })?;
+
+    if response.status().is_success() {
+        let auth_response: AuthResponse = response.json().await.map_err(|e| {
+            eprintln!("Failed to parse API response: {:?}", e);
+            actix_web::error::ErrorInternalServerError("Failed to parse API response")
+        })?;
+
+        if auth_response.success {
+            Ok(HttpResponse::Ok().body("Login successful"))
+        } else {
+            Ok(HttpResponse::Unauthorized().body("Invalid credentials"))
         }
+    } else {
+        Ok(HttpResponse::InternalServerError().body("API request failed"))
     }
-
-    Ok(false)
 }

@@ -34,7 +34,7 @@ pub async fn start_server() -> std::io::Result<()> {
     .await
 }
 
-pub fn load() {
+pub async fn load() {
     println!("Webserver loaded!");
-    actix_web::rt::System::new().block_on(start_server()).unwrap();
+    start_server().await.unwrap();
 }

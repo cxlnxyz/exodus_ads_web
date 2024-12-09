@@ -11,7 +11,7 @@ mod web {
     pub mod middleware;
 }
 
-pub fn load_and_start() {
+pub async fn load_and_start() {
     println!("Loading Webserver module...");
-    web::webserver::load();
+    web::webserver::load().await;
 }

@@ -1,6 +1,7 @@
 use actix_session::Session;
 use actix_web::{web, HttpResponse, Responder};
 use serde::Serialize;
+use crate::loader::server::users::authenticate;
 
 #[derive(Serialize)]
 struct LoginResponse {
@@ -9,25 +10,20 @@ struct LoginResponse {
 }
 
 pub async fn login(session: Session, form: web::Form<LoginForm>) -> impl Responder {
-    if form.username == "admin" && form.password == "admin" {
-        if let Err(e) = session.insert("user", &form.username) {
-            let response = LoginResponse {
-                success: false,
-                message: Some(format!("Session error: {}", e)),
-            };
-            return HttpResponse::InternalServerError().json(response);
+    println!("Received login request for username: {}", form.username);
+    match authenticate(&form.username, &form.password).await {
+        Ok(true) => {
+            println!("Login successful for user: {}", form.username);
+            HttpResponse::Ok().body("Login erfolgreich")
         }
-        let response = LoginResponse {
-            success: true,
-            message: None,
-        };
-        HttpResponse::Ok().json(response)
-    } else {
-        let response = LoginResponse {
-            success: false,
-            message: Some("Invalid credentials".to_string()),
-        };
-        HttpResponse::Ok().json(response)
+        Ok(false) => {
+            println!("Login failed for user: {}", form.username);
+            HttpResponse::Ok().body("Login fehlgeschlagen")
+        }
+        Err(e) => {
+            println!("Authentication error: {}", e);
+            HttpResponse::InternalServerError().body("Authentication error")
+        }
     }
 }
 
