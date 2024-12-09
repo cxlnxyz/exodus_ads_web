@@ -1,7 +1,7 @@
 use actix_session::Session;
 use actix_web::{web, HttpResponse, Responder};
 use serde::Serialize;
-use crate::loader::server::users::authenticate;
+use crate::loader::server::users::{ldap_login, LoginRequest};
 
 #[derive(Serialize)]
 struct LoginResponse {
@@ -11,15 +11,11 @@ struct LoginResponse {
 
 pub async fn login(session: Session, form: web::Form<LoginForm>) -> impl Responder {
     println!("Received login request for username: {}", form.username);
-    match authenticate(&form.username, &form.password).await {
-        Ok(true) => {
-            println!("Login successful for user: {}", form.username);
-            HttpResponse::Ok().body("Login erfolgreich")
-        }
-        Ok(false) => {
-            println!("Login failed for user: {}", form.username);
-            HttpResponse::Ok().body("Login fehlgeschlagen")
-        }
+    match ldap_login(web::Json(LoginRequest {
+        username: form.username.clone(),
+        password: form.password.clone(),
+    })).await {
+        Ok(response) => response,
         Err(e) => {
             println!("Authentication error: {}", e);
             HttpResponse::InternalServerError().body("Authentication error")

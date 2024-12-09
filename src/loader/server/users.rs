@@ -4,8 +4,8 @@ use reqwest::Client;
 
 #[derive(Serialize, Deserialize)]
 pub struct LoginRequest {
-    username: String,
-    password: String,
+    pub(crate) username: String,
+    pub(crate) password: String,
 }
 
 #[derive(Serialize, Deserialize)]
