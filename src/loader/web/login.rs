@@ -1,7 +1,7 @@
 use actix_session::Session;
 use actix_web::{web, HttpResponse, Responder};
 use serde::Serialize;
-use crate::loader::server::ldap::LoginRequest;
+use crate::loader::server::users::LoginRequest;
 use crate::loader::server::users::ldap_login;
 
 #[derive(Serialize)]

@@ -1,6 +1,12 @@
 use actix_web::{web, HttpResponse, Error};
 use serde::{Deserialize, Serialize};
-use crate::loader::server::ldap::{run_powershell_script, LoginRequest};
+use crate::loader::server::ldap::run_powershell_script;
+
+#[derive(Serialize, Deserialize)]
+pub struct LoginRequest {
+    pub username: String,
+    pub password: String,
+}
 
 #[derive(Serialize, Deserialize)]
 struct AuthResponse {
