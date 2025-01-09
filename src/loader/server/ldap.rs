@@ -14,23 +14,6 @@ struct AuthResponse {
     success: bool,
 }
 
-pub(crate) async fn ldap_login(login: web::Json<LoginRequest>) -> Result<HttpResponse, Error> {
-    match run_powershell_script(&login.username, &login.password) {
-        Ok(output) => {
-            let output_str = String::from_utf8_lossy(&output.stdout);
-            if output_str.contains("Login successful") {
-                Ok(HttpResponse::Ok().body("Login successful"))
-            } else {
-                Ok(HttpResponse::Unauthorized().body("Invalid credentials"))
-            }
-        }
-        Err(e) => {
-            eprintln!("Error executing PowerShell script: {}", e);
-            Ok(HttpResponse::InternalServerError().body("Authentication error"))
-        }
-    }
-}
-
 pub(crate) fn run_powershell_script(username: &str, password: &str) -> Result<Output, String> {
     let script_path = "src/loader/server/ldap.ps1"; // Path to your PowerShell script
 
