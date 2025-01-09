@@ -143,12 +143,31 @@
                     <p class="text-gray-600 dark:text-gray-300">Lade Benutzer...</p>
                 </div>
             </main>`,
-            sync: '<h2 class="text-2xl font-semibold text-gray-800 dark:text-white">Synchronisation Content</h2>',
+            sync: `<main class="p-6">
+                <h2 class="text-2xl font-semibold text-gray-800 dark:text-white mb-6">Synchronisation</h2>
+                <div id="sync-status" class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow dark:shadow-xl">
+                    <p class="text-gray-600 dark:text-gray-300">Synchronisation läuft...</p>
+                </div>
+            </main>`,
             settings: '<h2 class="text-2xl font-semibold text-gray-800 dark:text-white">Einstellungen Content</h2>',
         };
         document.getElementById('main-content').innerHTML = content[section];
         if (section === 'users') {
             fetchUsers();
+        } else if (section === 'sync') {
+            syncAD();
+        }
+    }
+
+    async function syncAD() {
+        try {
+            const response = await fetch('/dashboard/sync');
+            const status = await response.text();
+            const syncStatus = document.getElementById('sync-status');
+            syncStatus.innerHTML = `<p class="text-gray-600 dark:text-gray-300">${status}</p>`;
+        } catch (error) {
+            const syncStatus = document.getElementById('sync-status');
+            syncStatus.innerHTML = `<p class="text-red-600 dark:text-red-400">Error during synchronization: ${error.message}</p>`;
         }
     }
 
@@ -186,7 +205,6 @@
     const darkModeToggle = document.getElementById('darkModeToggle');
     const darkModeIcon = document.getElementById('darkModeIcon');
 
-    // Check for saved dark mode preference or system preference
     if (localStorage.getItem('darkMode') === 'enabled' ||
         (!('darkMode' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
         htmlElement.classList.add('dark');
