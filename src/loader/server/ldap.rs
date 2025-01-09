@@ -20,6 +20,7 @@ pub fn run_powershell_script(username: &str, password: &str) -> Result<Output, S
     Ok(output)
 }
 
+
 pub fn get_ad_users() -> Result<Output, String> {
     let script_path = "src/loader/server/get_ad_users.ps1"; // Path to your PowerShell script
 
