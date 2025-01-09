@@ -18,7 +18,12 @@ pub async fn login(session: Session, form: web::Form<LoginForm>) -> impl Respond
     })).await {
         Ok(response) => {
             println!("Login response: {:?}", response);
-            response
+            if response.status().is_success() {
+                session.insert("user", &form.username).unwrap();
+                HttpResponse::Found().header("Location", "/dashboard").finish()
+            } else {
+                HttpResponse::Unauthorized().body("Invalid credentials")
+            }
         },
         Err(e) => {
             println!("Authentication error: {}", e);

@@ -48,22 +48,35 @@ where
         let session = req.get_session();
         let is_logged_in = session.get::<String>("user").unwrap_or(None).is_some();
 
-        if is_logged_in || req.path() == "/login" {
-            let fut = self.service.call(req);
-            Box::pin(async move {
-                let res = fut.await?;
-                Ok(res.map_into_left_body())
-            })
+        if is_logged_in {
+            if req.path() == "/login" {
+                let response = HttpResponse::Found().header("Location", "/dashboard").finish();
+                Box::pin(async move { Ok(req.into_response(response.map_into_right_body())) })
+            } else {
+                let fut = self.service.call(req);
+                Box::pin(async move {
+                    let res = fut.await?;
+                    Ok(res.map_into_left_body())
+                })
+            }
         } else {
-            Box::pin(async move {
-                let (http_request, _payload) = req.into_parts();
-                let content = read_to_string("src/sites/unauthorized.html").unwrap();
-                let response = HttpResponse::Unauthorized()
-                    .content_type("text/html")
-                    .body(content)
-                    .map_into_right_body();
-                Ok(ServiceResponse::new(http_request, response))
-            })
+            if req.path() == "/login" {
+                let fut = self.service.call(req);
+                Box::pin(async move {
+                    let res = fut.await?;
+                    Ok(res.map_into_left_body())
+                })
+            } else {
+                Box::pin(async move {
+                    let (http_request, _payload) = req.into_parts();
+                    let content = read_to_string("src/sites/unauthorized.html").unwrap();
+                    let response = HttpResponse::Unauthorized()
+                        .content_type("text/html")
+                        .body(content)
+                        .map_into_right_body();
+                    Ok(ServiceResponse::new(http_request, response))
+                })
+            }
         }
     }
 }
