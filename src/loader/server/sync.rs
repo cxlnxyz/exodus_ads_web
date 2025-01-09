@@ -26,3 +26,37 @@ pub fn run_syncall(dc1_ip: &str, dc2_ip: &str) -> Result<Output, String> {
         stderr: Vec::new(),
     })
 }
+
+pub fn get_recent_syncs() -> Result<Vec<SyncRecord>, String> {
+    // Replace with actual logic to fetch recent syncs
+    let syncs = vec![
+        SyncRecord {
+            timestamp: "2024-12-2 14:00".to_string(),
+            system: "AD-Server Home".to_string(),
+            status: "Erfolgreich".to_string(),
+            user: "admin".to_string(),
+        },
+        SyncRecord {
+            timestamp: "2024-12-2 13:00".to_string(),
+            system: "AD-Server Home".to_string(),
+            status: "In Bearbeitung".to_string(),
+            user: "admin".to_string(),
+        },
+        SyncRecord {
+            timestamp: "2024-12-2 12:00".to_string(),
+            system: "AD-Server Home".to_string(),
+            status: "Erfolgreich".to_string(),
+            user: "admin".to_string(),
+        },
+    ];
+
+    Ok(syncs)
+}
+
+#[derive(serde::Serialize)]
+pub struct SyncRecord {
+    pub timestamp: String,
+    pub system: String,
+    pub status: String,
+    pub user: String,
+}
