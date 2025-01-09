@@ -55,7 +55,6 @@
         </form>
     </div>
 </div>
-
 <script>
     document.querySelector('form').addEventListener('submit', async (event) => {
         event.preventDefault();
@@ -69,20 +68,12 @@
             body: formData,
         });
 
-        if (response.headers.get('Content-Type')?.includes('application/json')) {
-            const result = await response.json();
-            if (result.success) {
-                window.location.href = '/dashboard';
-            } else {
-                const errorMessage = document.getElementById('error-message');
-                errorMessage.textContent = result.message;
-                setTimeout(() => {
-                    errorMessage.textContent = '';
-                }, 3000); // Clear the error message after 3 seconds
-            }
+        if (response.ok) {
+            window.location.href = '/dashboard';
         } else {
             const errorMessage = document.getElementById('error-message');
-            errorMessage.textContent = 'An unexpected error occurred.';
+            const result = await response.text();
+            errorMessage.textContent = result || 'An unexpected error occurred.';
             setTimeout(() => {
                 errorMessage.textContent = '';
             }, 3000); // Clear the error message after 3 seconds
