@@ -14,3 +14,4 @@ local-ip-address = "0.4"
 log = "0.4"
 reqwest = { version = "0.12.9", features = ["json"] }
 serde_json = "1.0.135"
+tokio = { version = "1", features = ["full"] }

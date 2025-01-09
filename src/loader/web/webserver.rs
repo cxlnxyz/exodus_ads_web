@@ -5,6 +5,7 @@ use actix_web::{web, App, HttpResponse, HttpServer, Responder};
 use std::fs::read_to_string;
 use crate::loader::server::ldap::get_ad_users;
 use crate::loader::server::sync::{run_syncall, get_recent_syncs};
+use tokio::task;
 
 async fn index() -> impl Responder {
     let content = read_to_string("src/sites/index.html").unwrap();
@@ -21,24 +22,30 @@ async fn logout(session: Session) -> impl Responder {
     HttpResponse::Found().header("Location", "/login").finish()
 }
 
-async fn sync_ad() -> impl Responder {
-    let dc1_ip = "CN-DC1.COLIN.HOME"; // Replace with your DC1 FQDN
-    let dc2_ip = "CN-DC2.COLIN.HOME"; // Replace with your DC2 FQDN
+async fn sync_ad() -> Result<HttpResponse, actix_web::Error> {
+    let dc1_ip = "CN-DC1.COLIN.HOME";
+    let dc2_ip = "CN-DC2.COLIN.HOME";
 
-    match run_syncall(dc1_ip, dc2_ip) {
-        Ok(_) => HttpResponse::Ok().body("Synchronization successful"),
-        Err(e) => HttpResponse::InternalServerError().body(format!("Error during synchronization: {}", e)),
-    }
+    task::spawn_blocking(move || run_syncall(dc1_ip, dc2_ip))
+        .await
+        .map_err(|e| actix_web::error::ErrorInternalServerError(format!("Error during synchronization: {}", e)))
+        .and_then(|result| match result {
+            Ok(_) => Ok(HttpResponse::Ok().body("Synchronization successful")),
+            Err(e) => Ok(HttpResponse::InternalServerError().body(format!("Error during synchronization: {}", e))),
+        })
 }
 
-async fn get_user_count() -> impl Responder {
-    match get_ad_users() {
-        Ok(output) => {
-            let users: Vec<serde_json::Value> = serde_json::from_slice(&output.stdout).unwrap();
-            HttpResponse::Ok().json(users.len())
-        }
-        Err(e) => HttpResponse::InternalServerError().body(format!("Error fetching user count: {}", e)),
-    }
+async fn get_user_count() -> Result<HttpResponse, actix_web::Error> {
+    task::spawn_blocking(|| get_ad_users())
+        .await
+        .map_err(|e| actix_web::error::ErrorInternalServerError(format!("Error fetching user count: {}", e)))
+        .and_then(|result| match result {
+            Ok(output) => {
+                let users: Vec<serde_json::Value> = serde_json::from_slice(&output.stdout).unwrap();
+                Ok(HttpResponse::Ok().json(users.len()))
+            }
+            Err(e) => Ok(HttpResponse::InternalServerError().body(format!("Error fetching user count: {}", e))),
+        })
 }
 
 async fn get_system_count() -> impl Responder {
@@ -47,14 +54,14 @@ async fn get_system_count() -> impl Responder {
     HttpResponse::Ok().json(system_count)
 }
 
-async fn get_recent_syncs_handler() -> impl Responder {
-    match web::block(|| get_recent_syncs()).await {
-        Ok(syncs) => match syncs {
-            Ok(syncs) => HttpResponse::Ok().json(syncs),
-            Err(e) => HttpResponse::InternalServerError().body(format!("Error fetching recent syncs: {}", e)),
-        },
-        Err(e) => HttpResponse::InternalServerError().body(format!("Error blocking thread: {}", e)),
-    }
+async fn get_recent_syncs_handler() -> Result<HttpResponse, actix_web::Error> {
+    task::spawn_blocking(|| get_recent_syncs())
+        .await
+        .map_err(|e| actix_web::error::ErrorInternalServerError(format!("Error blocking thread: {}", e)))
+        .and_then(|result| match result {
+            Ok(syncs) => Ok(HttpResponse::Ok().json(syncs)),
+            Err(e) => Ok(HttpResponse::InternalServerError().body(format!("Error fetching recent syncs: {}", e))),
+        })
 }
 
 pub async fn start_server() -> std::io::Result<()> {
