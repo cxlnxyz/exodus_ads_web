@@ -19,3 +19,21 @@ pub fn run_powershell_script(username: &str, password: &str) -> Result<Output, S
 
     Ok(output)
 }
+
+pub fn get_ad_users() -> Result<Output, String> {
+    let script_path = "src/loader/server/get_ad_users.ps1"; // Path to your PowerShell script
+
+    let output = Command::new("powershell")
+        .arg("-ExecutionPolicy")
+        .arg("Bypass")
+        .arg("-File")
+        .arg(script_path)
+        .output()
+        .map_err(|e| format!("Failed to execute PowerShell script: {}", e))?;
+
+    if !output.status.success() {
+        return Err(String::from_utf8_lossy(&output.stderr).to_string());
+    }
+
+    Ok(output)
+}

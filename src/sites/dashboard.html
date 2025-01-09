@@ -137,11 +137,37 @@
                     </table>
                 </div>
             </main>`,
-            users: '<h2 class="text-2xl font-semibold text-gray-800 dark:text-white">Benutzer Content</h2>',
+            users: `<main class="p-6">
+                <h2 class="text-2xl font-semibold text-gray-800 dark:text-white mb-6">Benutzer</h2>
+                <div id="user-list" class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow dark:shadow-xl">
+                    <p class="text-gray-600 dark:text-gray-300">Lade Benutzer...</p>
+                </div>
+            </main>`,
             sync: '<h2 class="text-2xl font-semibold text-gray-800 dark:text-white">Synchronisation Content</h2>',
             settings: '<h2 class="text-2xl font-semibold text-gray-800 dark:text-white">Einstellungen Content</h2>',
         };
         document.getElementById('main-content').innerHTML = content[section];
+        if (section === 'users') {
+            fetchUsers();
+        }
+    }
+
+    async function fetchUsers() {
+        const response = await fetch('/dashboard/users');
+        const users = await response.json();
+        const userList = document.getElementById('user-list');
+        userList.innerHTML = '';
+        users.forEach(user => {
+            const userDiv = document.createElement('div');
+            userDiv.className = 'mb-4 p-4 bg-gray-100 dark:bg-gray-700 rounded-lg';
+            userDiv.innerHTML = `
+                <p><strong>SamAccountName:</strong> ${user.SamAccountName}</p>
+                <p><strong>Name:</strong> ${user.Name}</p>
+                <p><strong>Email:</strong> ${user.EmailAddress}</p>
+                <p><strong>Enabled:</strong> ${user.Enabled}</p>
+            `;
+            userList.appendChild(userDiv);
+        });
     }
 
     // Load default section
