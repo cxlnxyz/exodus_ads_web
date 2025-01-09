@@ -147,6 +147,7 @@
                 <h2 class="text-2xl font-semibold text-gray-800 dark:text-white mb-6">Synchronisation</h2>
                 <div id="sync-status" class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow dark:shadow-xl">
                     <p class="text-gray-600 dark:text-gray-300">Synchronisation läuft...</p>
+                    <button id="syncButton" class="mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Synchronisation starten</button>
                 </div>
             </main>`,
             settings: '<h2 class="text-2xl font-semibold text-gray-800 dark:text-white">Einstellungen Content</h2>',
@@ -155,7 +156,7 @@
         if (section === 'users') {
             fetchUsers();
         } else if (section === 'sync') {
-            syncAD();
+            document.getElementById('syncButton').addEventListener('click', syncAD);
         }
     }
 
