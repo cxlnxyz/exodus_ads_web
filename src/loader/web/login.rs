@@ -4,7 +4,7 @@ use serde::Serialize;
 use crate::loader::server::users::{ldap_login, LoginRequest};
 
 #[derive(Serialize)]
-pub struct LoginResponse {
+struct LoginResponse {
     success: bool,
     message: Option<String>,
 }
