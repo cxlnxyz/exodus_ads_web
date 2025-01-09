@@ -16,7 +16,10 @@ pub async fn login(session: Session, form: web::Form<LoginForm>) -> impl Respond
         username: form.username.clone(),
         password: form.password.clone(),
     })).await {
-        Ok(response) => response,
+        Ok(response) => {
+            println!("Login response: {:?}", response);
+            response
+        },
         Err(e) => {
             println!("Authentication error: {}", e);
             HttpResponse::InternalServerError().body("Authentication error")
