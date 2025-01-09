@@ -10,10 +10,10 @@ pub struct LoginRequest {
 }
 
 pub fn run_powershell_script(username: &str, password: &str) -> Result<Output, String> {
-    let script_path = "src/loader/server/ldap.ps1";
+    let script_path = "src/loader/server/ldap.ps1"; // Path to your PowerShell script
 
     let output = Command::new("powershell")
-        .args(&["-File", script_path, username, password])
+        .args(&["-ExecutionPolicy", "Bypass", "-File", script_path, username, password])
         .output()
         .map_err(|e| format!("Failed to execute PowerShell script: {}", e))?;
 
