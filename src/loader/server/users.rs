@@ -8,12 +8,15 @@ struct AuthResponse {
 }
 
 pub(crate) async fn ldap_login(login: web::Json<LoginRequest>) -> Result<HttpResponse, Error> {
+    println!("Running PowerShell script for username: {}", login.username);
     match run_powershell_script(&login.username, &login.password) {
         Ok(output) => {
             let output_str = String::from_utf8_lossy(&output.stdout);
+            println!("PowerShell script output: {}", output_str);
             if output_str.contains("Login successful") {
                 Ok(HttpResponse::Ok().body("Login successful"))
             } else {
+                println!("Invalid credentials: {}", output_str);
                 Ok(HttpResponse::Unauthorized().body("Invalid credentials"))
             }
         }
