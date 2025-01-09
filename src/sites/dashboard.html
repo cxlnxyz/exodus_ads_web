@@ -70,72 +70,7 @@
     function loadSection(section) {
         const content = {
             dashboard: `<main class="p-6">
-                <div class="grid grid-cols-3 gap-6 mb-6">
-                    <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow dark:shadow-xl">
-                        <div class="flex justify-between items-center mb-4">
-                            <h3 class="text-lg font-semibold text-gray-800 dark:text-white">Synchronisationen</h3>
-                            <i class="fas fa-sync text-blue-600 dark:text-blue-400"></i>
-                        </div>
-                        <div class="text-3xl font-bold text-blue-600 dark:text-blue-400">0</div>
-                        <div class="text-sm text-gray-500 dark:text-gray-400">Letzte 30 Tage</div>
-                    </div>
-                    <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow dark:shadow-xl">
-                        <div class="flex justify-between items-center mb-4">
-                            <h3 class="text-lg font-semibold text-gray-800 dark:text-white">Benutzer</h3>
-                            <i class="fas fa-users text-green-600 dark:text-green-400"></i>
-                        </div>
-                        <div class="text-3xl font-bold text-green-600 dark:text-green-400">1</div>
-                        <div class="text-sm text-gray-500 dark:text-gray-400">Aktive Benutzer</div>
-                    </div>
-                    <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow dark:shadow-xl">
-                        <div class="flex justify-between items-center mb-4">
-                            <h3 class="text-lg font-semibold text-gray-800 dark:text-white">Systeme</h3>
-                            <i class="fas fa-server text-purple-600 dark:text-purple-400"></i>
-                        </div>
-                        <div class="text-3xl font-bold text-purple-600 dark:text-purple-400">1</div>
-                        <div class="text-sm text-gray-500 dark:text-gray-400">Verbundene Systeme</div>
-                    </div>
-                </div>
-
-                <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow dark:shadow-xl">
-                    <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">Letzte Synchronisationen</h3>
-                    <table class="w-full">
-                        <thead>
-                        <tr class="bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300">
-                            <th class="text-left p-3">Zeitpunkt</th>
-                            <th class="text-left p-3">System</th>
-                            <th class="text-left p-3">Status</th>
-                            <th class="text-left p-3">Benutzer</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr class="border-b dark:border-gray-700">
-                            <td class="p-3">2024-12-2 14:00</td>
-                            <td class="p-3">AD-Server Home</td>
-                            <td class="p-3">
-                                <span class="bg-green-100 dark:bg-green-900 text-green-600 dark:text-green-300 px-2 py-1 rounded-full text-xs">Erfolgreich</span>
-                            </td>
-                            <td class="p-3">admin</td>
-                        </tr>
-                        <tr class="border-b dark:border-gray-700">
-                            <td class="p-3">2024-12-2 13:00</td>
-                            <td class="p-3">AD-Server Home</td>
-                            <td class="p-3">
-                                <span class="bg-yellow-100 dark:bg-yellow-900 text-yellow-600 dark:text-yellow-300 px-2 py-1 rounded-full text-xs">In Bearbeitung</span>
-                            </td>
-                            <td class="p-3">admin</td>
-                        </tr>
-                        <tr>
-                            <td class="p-3">2024-12-2 12:00</td>
-                            <td class="p-3">AD-Server Home</td>
-                            <td class="p-3">
-                                <span class="bg-green-100 dark:bg-green-900 text-green-600 dark:text-green-300 px-2 py-1 rounded-full text-xs">Erfolgreich</span>
-                            </td>
-                            <td class="p-3">admin</td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
+                <!-- Dashboard content here -->
             </main>`,
             users: `<main class="p-6">
                 <h2 class="text-2xl font-semibold text-gray-800 dark:text-white mb-6">Benutzer</h2>
@@ -153,21 +88,29 @@
     }
 
     async function fetchUsers() {
-        const response = await fetch('/dashboard/users');
-        const users = await response.json();
-        const userList = document.getElementById('user-list');
-        userList.innerHTML = '';
-        users.forEach(user => {
-            const userDiv = document.createElement('div');
-            userDiv.className = 'mb-4 p-4 bg-gray-100 dark:bg-gray-700 rounded-lg';
-            userDiv.innerHTML = `
-                <p><strong>SamAccountName:</strong> ${user.SamAccountName}</p>
-                <p><strong>Name:</strong> ${user.Name}</p>
-                <p><strong>Email:</strong> ${user.EmailAddress}</p>
-                <p><strong>Enabled:</strong> ${user.Enabled}</p>
-            `;
-            userList.appendChild(userDiv);
-        });
+        try {
+            const response = await fetch('/dashboard/users');
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            const users = await response.json();
+            const userList = document.getElementById('user-list');
+            userList.innerHTML = '';
+            users.forEach(user => {
+                const userDiv = document.createElement('div');
+                userDiv.className = 'mb-4 p-4 bg-gray-100 dark:bg-gray-700 rounded-lg';
+                userDiv.innerHTML = `
+                    <p><strong>SamAccountName:</strong> ${user.SamAccountName}</p>
+                    <p><strong>Name:</strong> ${user.Name}</p>
+                    <p><strong>Email:</strong> ${user.EmailAddress}</p>
+                    <p><strong>Enabled:</strong> ${user.Enabled}</p>
+                `;
+                userList.appendChild(userDiv);
+            });
+        } catch (error) {
+            const userList = document.getElementById('user-list');
+            userList.innerHTML = `<p class="text-red-600 dark:text-red-400">Error loading users: ${error.message}</p>`;
+        }
     }
 
     // Load default section
