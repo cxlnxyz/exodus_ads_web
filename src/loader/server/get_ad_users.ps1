@@ -1,5 +1,6 @@
 try {
     $users = Get-ADUser -Filter * -Property SamAccountName, Name, EmailAddress, Enabled
+    $userList = @()
     foreach ($user in $users) {
         $userInfo = @{
             SamAccountName = $user.SamAccountName
@@ -7,8 +8,9 @@ try {
             EmailAddress = $user.EmailAddress
             Enabled = $user.Enabled
         }
-        Write-Output ($userInfo | ConvertTo-Json)
+        $userList += $userInfo
     }
+    $userList | ConvertTo-Json
     exit 0
 } catch {
     Write-Output "Failed to fetch users"
