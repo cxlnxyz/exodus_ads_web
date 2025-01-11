@@ -49,7 +49,7 @@ async fn get_user_count() -> Result<HttpResponse, actix_web::Error> {
 }
 
 async fn get_system_count() -> impl Responder {
-    // Replace with actual logic to count systems
+    // TODO: Implement system count
     let system_count = 1;
     HttpResponse::Ok().json(system_count)
 }

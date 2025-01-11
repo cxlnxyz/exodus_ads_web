@@ -1,7 +1,7 @@
 use std::process::{Command, Output};
 
 pub fn run_powershell_script(username: &str, password: &str) -> Result<Output, String> {
-    let script_path = "src/loader/server/check_ad_login.ps1"; // Path to your PowerShell script
+    let script_path = "src/loader/server/check_ad_login.ps1";
 
     let output = Command::new("powershell")
         .arg("-ExecutionPolicy")
@@ -22,7 +22,7 @@ pub fn run_powershell_script(username: &str, password: &str) -> Result<Output, S
 
 
 pub fn get_ad_users() -> Result<Output, String> {
-    let script_path = "src/loader/server/get_ad_users.ps1"; // Path to your PowerShell script
+    let script_path = "src/loader/server/get_ad_users.ps1";
 
     let output = Command::new("powershell")
         .arg("-ExecutionPolicy")

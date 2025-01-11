@@ -28,7 +28,7 @@ pub fn run_syncall(dc1_ip: &str, dc2_ip: &str) -> Result<Output, String> {
 }
 
 pub fn get_recent_syncs() -> Result<Vec<SyncRecord>, String> {
-    // Replace with actual logic to fetch recent syncs
+    // TODO: Create Data Folder and store sync records in a file
     let syncs = vec![
         SyncRecord {
             timestamp: "2024-12-2 14:00".to_string(),
