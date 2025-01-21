@@ -21,7 +21,7 @@ Exodus is a web application for synchronizing Active Directory. It provides a us
 
 1. Clone the repository:
     ```sh
-    git clone https://github.com/beklauter/exodus_ads_web.git
+    git clone https://github.com/cxlnxyz/exodus_ads_web.git
     cd exodus_ads_web/
     ```
 
